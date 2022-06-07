@@ -2,7 +2,7 @@ import React from 'react';
 import ReactQRCode from "react-qr-code";
 import { Box } from '@mui/material';
 
-const QrCode = () => {
+const QrCode = ({ value }) => {
   return (
     <Box
       sx={{
@@ -13,7 +13,7 @@ const QrCode = () => {
     >
       <ReactQRCode
         title="Download the App"
-        value="test"
+        value={value}
         size={220}
         level="H"
       />

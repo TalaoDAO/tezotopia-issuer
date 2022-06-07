@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import ProcessSteps from '../../parts/ProcessSteps';
 import FullLayout from '../../layout/FullLayout';
 import VoucherCard from './VoucherCard';
+import { LinkButton } from '../../components/Styles/LinkButton';
 import { Wrapper } from './styles';
 
 const Issuer = () => {
@@ -20,9 +21,9 @@ const Issuer = () => {
         >
           <VoucherCard />
 
-          <button className="voucher-btn">
+          <LinkButton>
             Get your Tezotopia voucher
-          </button>
+          </LinkButton>
         </Box>
 
         <Box sx={{ mb: 10 }}>

@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import ProcessSteps from '../../parts/ProcessSteps';
 import QrCode from '../../components/QrCode';
 import FullLayout from '../../layout/FullLayout';
+import API from '../../api';
 import { Wrapper } from './styles';
+import { LinkButton } from "../../components/Styles/LinkButton";
 
 const Dashboard = () => {
+  const { voucherId } = useParams();
+  const [qrUrl, setQRUrl] = useState('');
+  const [showQrCode, setShowQrCode] = useState(false);
+
+  const activate = () => {
+    setShowQrCode(true);
+  };
+
+  useEffect(() => {
+    if (voucherId) {
+      API.vouchers.getQRUrl(voucherId)
+        .then((res) => {
+          const { data = {} } = res;
+          if (data.success) {
+            setQRUrl(data.data);
+          }
+        })
+        .catch((err) => {
+
+        })
+    }
+  }, [voucherId]);
+
   return (
     <FullLayout>
       <Wrapper>
@@ -40,14 +66,24 @@ const Dashboard = () => {
           <ProcessSteps />
         </Box>
 
-        <Typography
-          sx={{ color: '#fff', mb: 1, textAlign: 'center' }}
-        >
-          Scan to download
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <QrCode />
-        </Box>
+        {
+          showQrCode ? (
+            <>
+              <Typography
+                sx={{ color: '#fff', mb: 1, textAlign: 'center' }}
+              >
+                Scan to download
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <QrCode value={qrUrl} />
+              </Box>
+            </>
+          ) : (
+            <LinkButton onClick={activate}>
+              Activate
+            </LinkButton>
+          )
+        }
       </Wrapper>
     </FullLayout>
   );

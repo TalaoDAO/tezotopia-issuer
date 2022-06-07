@@ -8,10 +8,6 @@ body {
 img {
   max-width: 100%;
 }
-body {
-  background: url("../img/bg-img-2.png") no-repeat;
-  background-size: cover;
-}
 
 .left-content {
   display: flex;
