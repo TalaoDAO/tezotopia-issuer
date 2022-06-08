@@ -37,7 +37,7 @@ const Dashboard = () => {
   return (
     <FullLayout>
       <Wrapper>
-        <Box sx={{ mb: 10 }}>
+        <Box sx={{ mb: 5 }}>
           <div className="title-container">
             <img className="unit-img" src="/assets/img/unit-left-tablet.png" alt="" />
 
@@ -61,6 +61,11 @@ const Dashboard = () => {
             </Box>
 
             <img className="unit-img" src="/assets/img/unit-right-tablet.png" alt="" />
+          </div>
+
+          <div className="download-section">
+            <img className="download-img" src="/assets/img/google-play.png" alt="" />
+            <img className="download-img" src="/assets/img/app-store.png" alt="" />
           </div>
         </Box>
 

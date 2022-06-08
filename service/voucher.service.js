@@ -1,5 +1,6 @@
 const moment = require('moment');
 const uuid = require('uuid');
+const axios = require('axios');
 
 const updateCredential = async (voucher, subjectId, correlation) => {
   const now = moment();
@@ -15,6 +16,24 @@ const updateCredential = async (voucher, subjectId, correlation) => {
   return voucher;
 };
 
+const storeSignedVoucher = async (voucher) => {
+  await sendToAnalytics(voucher);
+}
+
+const sendToAnalytics = async (voucher) => {
+  return axios.post(
+    'https://talao.co/analytics/api/newvoucher',
+    voucher,
+    {
+      headers: {
+        'accept': 'application/json',
+        'key': 'SECRET_KEY'
+      }
+    }
+  );
+}
+
 module.exports = {
   updateCredential,
+  storeSignedVoucher,
 }

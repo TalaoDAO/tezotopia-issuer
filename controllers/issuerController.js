@@ -4,7 +4,7 @@ const moment = require('moment');
 const Voucher = require('../models/voucher');
 const client = require('../helpers/redis-client');
 const { findUser, checkExpiration, storeSession } = require('../service/auth.service');
-const { updateCredential } = require('../service/voucher.service');
+const { updateCredential, storeSignedVoucher } = require('../service/voucher.service');
 const didkit = require("../helpers/didkit-handler");
 const config = require("config");
 
@@ -110,6 +110,7 @@ exports.getSignedVoucher = async (req, res) => {
     const verificationMethod = await didkit.getVerificationMethod(config.get('DEFAULT_JWK'));
 
     // const signedVoucher = await verificationMethod(voucher);
+    // await storeSignedVoucher(voucher);
 
     res.status(200).json(voucher);
   } catch (err) {

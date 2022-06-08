@@ -31,7 +31,7 @@ export const Wrapper = styled('div')`
       text-align: center;
       line-height: 1.125;
       text-shadow: 0 0 30px #7452ad;
-      
+
       ${props => props.theme.breakpoints.up('md')} {
         font-size: 54px;
       }
@@ -39,6 +39,40 @@ export const Wrapper = styled('div')`
       ${props => props.theme.breakpoints.up('lg')} {
         font-size: 64px;
       }
+    }
+  }
+
+  .download-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .download-img {
+      max-width: calc(50% - 10px);
+      height: auto;
+      
+      &:first-child {
+        margin-right: 10px;
+      }
+      
+      &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+      }
+    }
+
+    ${props => props.theme.breakpoints.up('xs')} {
+      justify-content: center;
+      
+      .download-img {
+        &:first-child {
+          margin-right: 20px;
+        }
+      }
+    }
+    
+    ${props => props.theme.breakpoints.up('sm')} {
+      display: none;
     }
   }
 `;
