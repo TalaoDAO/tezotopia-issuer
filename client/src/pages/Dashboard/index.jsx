@@ -14,12 +14,14 @@ const Dashboard = () => {
   const [showQrCode, setShowQrCode] = useState(false);
 
   const activate = () => {
-    setShowQrCode(true);
+    if (qrUrl) {
+      setShowQrCode(true);
+    }
   };
 
   useEffect(() => {
     if (voucherId) {
-      API.vouchers.getQRUrl(voucherId)
+      API.issuer.getQRUrl(voucherId)
         .then((res) => {
           const { data = {} } = res;
           if (data.success) {

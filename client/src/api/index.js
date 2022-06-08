@@ -1,5 +1,5 @@
-import vouchers from './vouchers';
+import issuer from './issuer';
 
 export default {
-  vouchers
+  issuer,
 }

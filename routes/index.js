@@ -1,5 +1,5 @@
 const router = require('express').Router();
 
-router.use('/api/vouchers', require('./voucher'));
+router.use('/api/issuer', require('./issuer'));
 
 module.exports = router;

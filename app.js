@@ -5,6 +5,7 @@ const routes = require('./routes');
 const http = require('http');
 const socket = require('socket.io');
 const config = require("config");
+const client = require('./helpers/redis-client');
 require('./helpers/mongoose').connect();
 const app = express();
 

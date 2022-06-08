@@ -8,7 +8,6 @@ exports.getDid = async function (privateKey) {
         console.log(error)
     }
     return null;
-    
 };
 
 exports.getVersion = async function () {
@@ -20,3 +19,14 @@ exports.getVersion = async function () {
     return null;
     
 };
+
+
+exports.getVerificationMethod = async function(privateKey) {
+    try {
+        const verificationMethod = await DIDKit.keyToVerificationMethod("tz", privateKey);
+        return verificationMethod;
+    } catch (error) {
+        console.log(error)
+    }
+    return null;
+}

@@ -27,7 +27,26 @@ const storeSession = async () => {
   return userData;
 }
 
+const findUser = async (userId) => {
+  const users = await client.lRange(config.get('REDIS_KEY'), 0, -1);
+  const userIndex = users.findIndex((item) => {
+    return JSON.parse(item).id === userId;
+  });
+
+  if (userIndex === -1) return null;
+
+  return JSON.parse(users[userIndex]);
+};
+
+const checkExpiration = async (user) => {
+  const diff = moment().diff(moment(user.date_time), 'minutes');
+
+  return diff > 5;
+}
+
 module.exports = {
   generateAccessToken,
-  storeSession
+  storeSession,
+  findUser,
+  checkExpiration,
 };

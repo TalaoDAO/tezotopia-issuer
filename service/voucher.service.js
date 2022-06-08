@@ -1,20 +1,20 @@
-const Voucher = require('../models/voucher');
-const { storeSession } = require('./auth.service');
+const moment = require('moment');
+const uuid = require('uuid');
 
-const generateQrCode = async (voucherId) => {
-  const voucher = await Voucher.findById(voucherId);
+const updateCredential = async (voucher, subjectId, correlation) => {
+  const now = moment();
 
-  if (!voucher) {
-    throw new Error('No voucher found');
-  }
+  voucher.voucher.credentialSubject.id = subjectId;
+  voucher.voucher.id = `urn:uuid:${uuid.v4()}`;
+  voucher.voucher.issuanceDate = now.toDate();
+  voucher.voucher.expirationDate = now.add(voucher.voucher.credentialSubject.offers.duration, 'days').toDate();
+  voucher.voucher.credentialSubject.associatedAddress.blockchainTezos = correlation;
 
-  const userData = await storeSession();
+  await voucher.save();
 
-  const url = `https://tezotopia.talao.co/issuer/${'voucher.id'}/${userData.id}?issuer=${userData.issuer}`;
-
-  return url;
+  return voucher;
 };
 
 module.exports = {
-  generateQrCode,
+  updateCredential,
 }
