@@ -7,6 +7,7 @@ const { findUser, checkExpiration, storeSession } = require('../service/auth.ser
 const { updateCredential, storeSignedVoucher } = require('../service/voucher.service');
 const didkit = require("../helpers/didkit-handler");
 const config = require("config");
+const { CREDENTIAL_MANIFEST } = require("../utils");
 
 exports.generateQRCode = async (req, res) => {
   const { params: { voucherId } } = req;
@@ -19,7 +20,7 @@ exports.generateQRCode = async (req, res) => {
 
     const user = await storeSession();
 
-    const url = `https://tezotopia.talao.co/issuer/${voucher.id}/${user.id}?issuer=${user.issuer}`;
+    const url = `${config.get('API_URL')}/api/issuer/${voucher.id}/${user.id}?issuer=${user.issuer}`;
 
     res.status(200).json({ message: "QR Code URL", success: true, data: url });
   } catch (err) {
@@ -38,7 +39,8 @@ exports.getChallenge = async (req, res) => {
       return res.status(400).json({ message: 'Not found voucher', success: false });
     }
 
-    const user = await findUser(qrRandom);
+    const userObj = await findUser(qrRandom);
+    const user = userObj.user;
     if (!user) {
       return res.status(400).json({ message: 'Invalid session!', success: false });
     }
@@ -53,15 +55,15 @@ exports.getChallenge = async (req, res) => {
     const now = moment();
     user.date_time = now;
 
-    await client.lSet(config.get('REDIS_KEY'), userIndex, JSON.stringify(user))
+    await client.lSet(config.get('REDIS_KEY'), userObj.queueUserIndex, JSON.stringify(user))
 
     const data = {
       "type": "CredentialOffer",
-      "credentialPreview": voucher,
+      "credentialPreview": voucher._doc.voucher,
       "expires": now.add(5, 'minutes').toDate(),
       "challenge": challenge,
       "domain": "tezotopia.talao.co",
-      "credential_manifest": ""    // TODO -> load it from local server
+      "credential_manifest": CREDENTIAL_MANIFEST
     };
 
     res.status(200).json(data);
@@ -81,7 +83,8 @@ exports.getSignedVoucher = async (req, res) => {
   const { params: { voucherId, qrRandom } } = req;
 
   try {
-    const user = await findUser(qrRandom);
+    const userObj = await findUser(qrRandom);
+    const user = userObj.user;
     if (!user) {
       return res.status(400).json({ message: 'Invalid session!', success: false });
     }

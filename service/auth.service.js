@@ -35,7 +35,10 @@ const findUser = async (userId) => {
 
   if (userIndex === -1) return null;
 
-  return JSON.parse(users[userIndex]);
+  return {
+    user: JSON.parse(users[userIndex]),
+    queueUserIndex: userIndex
+  };
 };
 
 const checkExpiration = async (user) => {
