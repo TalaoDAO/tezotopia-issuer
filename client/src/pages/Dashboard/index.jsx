@@ -7,11 +7,13 @@ import FullLayout from '../../layout/FullLayout';
 import API from '../../api';
 import { Wrapper } from './styles';
 import { LinkButton } from "../../components/Styles/LinkButton";
+import {useNavigate} from "react-router-dom";
 
 const Dashboard = () => {
   const { voucherId } = useParams();
   const [qrUrl, setQRUrl] = useState('');
   const [showQrCode, setShowQrCode] = useState(false);
+  const navigate = useNavigate();
 
   const activate = () => {
     if (qrUrl) {
@@ -29,8 +31,10 @@ const Dashboard = () => {
           }
         })
         .catch((err) => {
-
+          navigate('/');
         })
+    } else {
+      navigate('/');
     }
   }, [voucherId]);
 
