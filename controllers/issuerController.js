@@ -4,7 +4,7 @@ const moment = require('moment');
 const Voucher = require('../models/voucher');
 const client = require('../helpers/redis-client');
 const { findUser, checkExpiration, storeSession } = require('../service/auth.service');
-const { updateCredential, storeSignedVoucher } = require('../service/voucher.service');
+const { updateCredential, storeSignedVoucher, getVoucherById } = require('../service/voucher.service');
 const didkit = require("../helpers/didkit-handler");
 const config = require("config");
 const { CREDENTIAL_MANIFEST } = require("../utils");
@@ -13,14 +13,14 @@ exports.generateQRCode = async (req, res) => {
   const { params: { voucherId } } = req;
 
   try {
-    const voucher = await Voucher.findById(voucherId);
+    const voucher = await getVoucherById(voucherId);
     if (!voucher) {
       res.status(400).json({ message: 'No voucher found', success: false });
     }
 
     const user = await storeSession();
 
-    const url = `${config.get('API_URL')}/api/issuer/${voucher.id}/${user.id}?issuer=${user.issuer}`;
+    const url = `${config.get('API_URL')}/api/issuer/${voucherId}/${user.id}?issuer=${user.issuer}`;
 
     res.status(200).json({ message: "QR Code URL", success: true, data: url });
   } catch (err) {
@@ -31,9 +31,8 @@ exports.generateQRCode = async (req, res) => {
 
 exports.getChallenge = async (req, res) => {
   const { params: { voucherId, qrRandom } } = req;
-
   try {
-    const voucher = await Voucher.findById(voucherId);
+    const voucher = await getVoucherById(voucherId);
 
     if (!voucher) {
       return res.status(400).json({ message: 'Not found voucher', success: false });
@@ -59,8 +58,7 @@ exports.getChallenge = async (req, res) => {
 
     const data = {
       "type": "CredentialOffer",
-      "credentialPreview": voucher._doc.voucher,
-      "expires": now.add(5, 'minutes').toDate(),
+      "credentialPreview": voucher,      "expires": now.add(5, 'minutes').toDate(),
       "challenge": challenge,
       "domain": "tezotopia.talao.co",
       "credential_manifest": CREDENTIAL_MANIFEST
@@ -79,7 +77,7 @@ exports.getSignedVoucher = async (req, res) => {
     return res.status(400).json({message: errors.array()[0].msg, success: false});
   }
 
-  const { presentation, Subject_id } = req.body;
+  const { presentation, subject_id } = req.body;
   const { params: { voucherId, qrRandom } } = req;
 
   try {
@@ -98,24 +96,23 @@ exports.getSignedVoucher = async (req, res) => {
 
     if (
       vp.proof.challenge !== user.challenge
-      || vp.holder !== Subject_id
+      || vp.holder !== subject_id
     ) {
       return res.status(404).json({ message: "Failed", success: false });
     }
 
-    let voucher = await Voucher.findById(voucherId);
+    let voucher = await getVoucherById(voucherId);
     if (!voucher) {
       return res.status(400).json({ message: 'Not found voucher', success: false });
     }
 
-    voucher = await updateCredential(voucher, Subject_id, vp.verifiableCredential.correlation[0])
+    voucher = await updateCredential(voucherId, voucher, subject_id, vp.verifiableCredential.credentialSubject.correlation)
 
     const verificationMethod = await didkit.getVerificationMethod(config.get('DEFAULT_JWK'));
+    const signedVoucher = await didkit.sign(config.get('DEFAULT_JWK'), verificationMethod, voucher);
+    await storeSignedVoucher(signedVoucher);
 
-    // const signedVoucher = await verificationMethod(voucher);
-    // await storeSignedVoucher(voucher);
-
-    res.status(200).json(voucher);
+    res.status(200).json(signedVoucher);
   } catch (err) {
     res.status(400).send({ message: err.message, success: false });
   }

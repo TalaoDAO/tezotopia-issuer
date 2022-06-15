@@ -160,7 +160,7 @@ exports.VOUCHER_OBJ = {
     ],
     "issuanceDate": "2022-00-00T00:00:00Z",
     "expirationDate": "2023-00-00T00:00:00Z",
-    "credentialSubject": {
+        "credentialSubject": {
         "id": "did:wallet",
         "type": "TezVoucher_1",
         "associatedAddress": {

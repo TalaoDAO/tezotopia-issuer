@@ -30,6 +30,6 @@ io.on('connection', function(socket){
     });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 httpServer.listen(PORT, () => console.log('Example app listening on port:', PORT))
