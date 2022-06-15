@@ -6,6 +6,8 @@
   "ACCESS_TOKEN_SECRET": "{ask to owner}",
   "REDIS_KEY": "REDIS_KEY",
   "API_URL": "API_URL",
+  "VOUCHER_API_URL": "http://localhost:5000",
+  "ANALYZE_API_URL": "https://talao.co/analytics",
   "EMAIL_PASS_DID": "EMAIL_PASS_DID",
   "AUTHORIZED_EMAILS": [
     "admin@talao.io",
