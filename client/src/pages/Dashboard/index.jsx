@@ -88,11 +88,21 @@ const Dashboard = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <QrCode value={qrUrl} />
               </Box>
+              <Typography
+                sx={{ color: '#aaa', mt: 6, textAlign: 'center' }}
+              >
+                *only for primary sales
+              </Typography>
             </>
           ) : (
-            <LinkButton onClick={activate}>
-              Activate
-            </LinkButton>
+            <>
+              <LinkButton className="d-lg-none">
+                <a className="text-decoration-none text-dark" href="https://app.altme.io/app/download?uri=">Open AltMe wallet</a>
+              </LinkButton>
+              <LinkButton className="d-none d-lg-block" onClick={activate}>
+                Activate
+              </LinkButton>
+            </>
           )
         }
       </Wrapper>
