@@ -132,30 +132,30 @@ exports.VOUCHER_OBJ = {
     "issuer": "did:tz:issuer",
     "name": [
         {
-            "@value": "5% off Tezotopia NFTs",
+            "@value": "15% off Tezotopia NFTs",
             "@language": "en"
         },
         {
-            "@value": "5% off Tezotopia NFTs",
+            "@value": "15% off Tezotopia NFTs",
             "@language": "de"
         },
         {
-            "@value": "5% de reduction sur les NFT Tezotopia",
+            "@value": "15% de reduction sur les NFT Tezotopia",
             "@language": "fr"
         }
     ],
     "description": [
         {
             "@language": "en",
-            "@value": "Get a 5% discount on your first Tezotop Block ! "
+            "@value": "Get a 15% discount on your first Tezotop Block ! "
         },
         {
             "@language": "de",
-            "@value": "Erhalten Sie 5 % Rabatt auf Ihren ersten Tezotop-Block!"
+            "@value": "Erhalten Sie 15% Rabatt auf Ihren ersten Tezotop-Block!"
         },
         {
             "@language": "fr",
-            "@value": "Bénéficiez de 5% de réduction sur votre premier Bloc Tezotop ! "
+            "@value": "Bénéficiez de 15% de réduction sur votre premier Bloc Tezotop ! "
         }
     ],
     "issuanceDate": "2022-00-00T00:00:00Z",
@@ -175,7 +175,7 @@ exports.VOUCHER_OBJ = {
                 "duration": "30",
                 "benefit": {
                     "category": "discount",
-                    "discount": "5%"
+                    "discount": "15%"
                 },
                 "offeredBy": {
                     "logo": "ipfs://QmZmdndUVRoxiVhUnjGrKnNPn8ah3jT8fxTCLMnAzRAFFZ",

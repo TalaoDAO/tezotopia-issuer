@@ -53,7 +53,7 @@ const Dashboard = () => {
                 sx={{ color: '#fbd400' }}
 
               >
-                5% discount
+                15% discount
               </Typography>
 
               <Typography
