@@ -97,7 +97,7 @@ const Dashboard = () => {
           ) : (
             <>
               <LinkButton className="d-lg-none">
-                <a className="text-decoration-none text-dark" href="https://app.altme.io/app/download?uri=">Open AltMe wallet</a>
+                <a className="text-decoration-none text-dark" href={`https://app.altme.io/app/download?uri=${qrUrl}`}>Open AltMe wallet</a>
               </LinkButton>
               <LinkButton className="d-none d-lg-block" onClick={activate}>
                 Activate

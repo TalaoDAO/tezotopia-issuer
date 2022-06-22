@@ -19,7 +19,7 @@ exports.connect = () => {
     .connect(
       config.get('mongo.uri'),
       {
-        keepAlive: 1,
+        keepAlive: true,
         useNewUrlParser: true,
         useUnifiedTopology: true
       },
