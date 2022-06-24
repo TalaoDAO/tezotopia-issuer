@@ -106,7 +106,7 @@ exports.getSignedVoucher = async (req, res) => {
       return res.status(400).json({ message: 'Not found voucher', success: false });
     }
 
-    voucher = await updateCredential(voucherId, voucher, subject_id, vp.verifiableCredential.credentialSubject.correlation)
+    voucher = await updateCredential(voucherId, voucher, subject_id, vp.verifiableCredential.credentialSubject.associatedAddress)
 
     const verificationMethod = await didkit.getVerificationMethod(config.get('DEFAULT_JWK'));
     const signedVoucher = await didkit.sign(config.get('DEFAULT_JWK'), verificationMethod, voucher);
