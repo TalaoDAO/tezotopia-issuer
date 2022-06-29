@@ -60,7 +60,13 @@ const getVoucherById = async (id) => {
       }
   );
 
-  return res ? res.data.voucher.voucher : null
+  if(res && res.data.voucher) {
+    return res.data.voucher.voucher
+  } else if(res && res.data.membershipCard) {
+    return res.data.membershipCard.membershipCards
+  }
+
+  return null
 }
 
 module.exports = {
