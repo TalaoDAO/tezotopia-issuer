@@ -23,7 +23,7 @@ exports.getVersion = async function () {
 
 exports.getVerificationMethod = async function(privateKey) {
     try {
-        const verificationMethod = await DIDKit.keyToVerificationMethod("tz", privateKey);
+        const verificationMethod = await DIDKit.keyToVerificationMethod("ethr", privateKey);
         return verificationMethod;
     } catch (error) {
         console.log(error)
