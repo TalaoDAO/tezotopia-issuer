@@ -8,12 +8,34 @@ import API from '../../api';
 import { Wrapper } from './styles';
 import { LinkButton } from "../../components/Styles/LinkButton";
 import {useNavigate} from "react-router-dom";
+import socketIOClient from 'socket.io-client';
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const { voucherId } = useParams();
   const [qrUrl, setQRUrl] = useState('');
+  const socket = socketIOClient(process.env.REACT_APP_SOCKET_URL);
   const [showQrCode, setShowQrCode] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    socket.on('authorised', function (isAuthorized) {
+      setLoggedIn(isAuthorized)
+    })
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'You are successfully logged in',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+  }, [isLoggedIn]);
 
   const activate = () => {
     if (qrUrl) {
@@ -27,7 +49,10 @@ const Dashboard = () => {
         .then((res) => {
           const { data = {} } = res;
           if (data.success) {
-            setQRUrl(data.data);
+            setQRUrl(data.data.url);
+            setInterval(function () {
+              socket.emit('check-status', data.data.user.session_id)
+            }, 2000);
           }
         })
         .catch((err) => {

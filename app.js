@@ -7,6 +7,7 @@ const socket = require('socket.io');
 const config = require("config");
 const client = require('./helpers/redis-client');
 require('./helpers/mongoose').connect();
+const jwt = require("jsonwebtoken");
 const app = express();
 
 app.use(cors());
@@ -27,6 +28,18 @@ io.on('connection', function(socket){
     console.log('a user connected');
     socket.on('disconnect', function(){
         console.log('User Disconnected');
+    });
+    socket.on('check-status', async function (msg) {
+        try {
+            const decode = jwt.verify(msg, config.get('ACCESS_TOKEN_SECRET'))
+            const users = await client.lRange(config.get('REDIS_KEY'), 0, -1)
+            const user = users.find(user => JSON.parse(user).id === decode.id)
+            if (user && JSON.parse(user).logged_in){
+                socket.emit('authorised', true);
+            }
+        } catch (err) {
+            socket.emit('authorised', false);
+        }
     });
 });
 
