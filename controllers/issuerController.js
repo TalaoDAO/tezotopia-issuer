@@ -22,7 +22,12 @@ exports.generateQRCode = async (req, res) => {
 
     const url = `${config.get('API_URL')}/api/issuer/${voucherId}/${user.id}?issuer=${user.issuer}`;
 
-    res.status(200).json({ message: "QR Code URL", success: true, data: url });
+    res.status(200).json({
+      message: "QR Code URL", success: true, data: {
+        url,
+        user
+      }
+    });
   } catch (err) {
     console.log(err.message);
     res.status(400).json({ message: err.message, success: false });
@@ -83,6 +88,7 @@ exports.getSignedVoucher = async (req, res) => {
   try {
     const userObj = await findUser(qrRandom);
     const user = userObj.user;
+    const userIndex = userObj.queueUserIndex;
     if (!user) {
       return res.status(400).json({ message: 'Invalid session!', success: false });
     }
@@ -111,6 +117,10 @@ exports.getSignedVoucher = async (req, res) => {
     const verificationMethod = await didkit.getVerificationMethod(config.get('DEFAULT_JWK'));
     const signedVoucher = await didkit.sign(config.get('DEFAULT_JWK'), verificationMethod, voucher);
     await storeSignedVoucher(signedVoucher);
+
+    user.logged_in = true;
+    await client.lSet(config.get('REDIS_KEY'), userIndex, JSON.stringify(user))
+    console.log(await client.lRange(config.get('REDIS_KEY'), 0, -1))
 
     res.status(200).json(signedVoucher);
   } catch (err) {

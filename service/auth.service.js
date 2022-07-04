@@ -11,7 +11,7 @@ const generateAccessToken = async (payload) => {
 
 const storeSession = async () => {
   const randomId = uuid.v4()
-  const sessionId = generateAccessToken({id: randomId})
+  const sessionId = await generateAccessToken({id: randomId})
   const dateTime = moment();
   const did = await didkit.getDid(config.get('DEFAULT_JWK'));
 
