@@ -9,6 +9,7 @@ import { Wrapper } from "./styles";
 import { LinkButton } from "../../components/Styles/LinkButton";
 import socketIOClient from "socket.io-client";
 import Success from "../../components/Success";
+import MobileDashboard from "../../components/MobileDashboard";
 
 const Dashboard = () => {
   const { voucherId } = useParams();
@@ -17,6 +18,7 @@ const Dashboard = () => {
   const [showQrCode, setShowQrCode] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isMembership, setIsMembership] = useState(false);
+  const [isVoucherMobile, setIsVoucherMobile] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (voucherId) {
       if (voucherId.includes('membership')) setIsMembership(true);
+      if (voucherId.includes('voucher_mobile')) setIsVoucherMobile(true);
       API.issuer.getQRUrl(voucherId)
         .then((res) => {
           const { data = {} } = res;
@@ -53,9 +56,9 @@ const Dashboard = () => {
   }, [voucherId]);
 
   return (
-    <FullLayout>
+    <FullLayout isVoucherMobile={isVoucherMobile}>
       <Wrapper>
-        <Box sx={{ mb: 5 }}>
+        {isVoucherMobile ? <MobileDashboard />: <Box sx={{ mb: 5 }}>
           <div className="title-container">
             <img className="unit-img" src="/assets/img/unit-left-tablet.png" alt="" />
 
@@ -71,15 +74,15 @@ const Dashboard = () => {
               </Typography>
 
               <Typography
-                  className="title"
-                  sx={{color: isMembership ? '#fbd400' : '#fff'}}
+                className="title"
+                sx={{color: isMembership ? '#fbd400' : '#fff'}}
               >
                 {isMembership ? 'for 1 years' : 'on NFTs*'}
               </Typography>
 
               {isMembership && <Typography
-                  fontSize={40}
-                  sx={{color: '#fff', fontWeight: 500, marginTop: 2}}
+                fontSize={40}
+                sx={{color: '#fff', fontWeight: 500, marginTop: 2}}
               >
                 on all NFT purchases*
               </Typography>}
@@ -92,10 +95,10 @@ const Dashboard = () => {
             <img className="download-img" src="/assets/img/google-play.png" alt="" />
             <img className="download-img" src="/assets/img/app-store.png" alt="" />
           </div>
-        </Box>
+        </Box>}
 
         <Box sx={{ mb: 10 }}>
-          <ProcessSteps />
+          <ProcessSteps isVoucherMobile={isVoucherMobile}/>
         </Box>
 
         {
