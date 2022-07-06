@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from "react";
 import ProcessStepCard from './ProcessStepCard';
 import { Wrapper } from './styles';
+import { PropTypes } from "prop-types";
 
-const steps = [
+const desktopSteps = [
   {
     text: 'Download your AltMe wallet and generate your account',
     img: '/assets/img/step-icon-1.png',
@@ -17,7 +18,24 @@ const steps = [
   }
 ];
 
-const ProcessSteps = ({ activeStep }) => {
+const mobileSteps = [
+  {
+    text: 'Download your AltMe wallet and generate your account',
+    img: '/assets/img/step-icon-1.png',
+  },
+  {
+    text: 'Request your Tezotopia voucher and get it in your AltMe wallet',
+    img: '/assets/img/step-icon-2.png',
+  },
+];
+
+const ProcessSteps = ({ activeStep, isVoucherMobile }) => {
+  const [steps, setSteps] = useState([])
+
+  useEffect(() => {
+    setSteps(isVoucherMobile ? mobileSteps: desktopSteps)
+  }, [isVoucherMobile])
+
   return (
     <Wrapper>
       {
@@ -41,5 +59,9 @@ const ProcessSteps = ({ activeStep }) => {
     </Wrapper>
   );
 };
+
+ProcessSteps.propTypes = {
+  isVoucherMobile: PropTypes.bool.isRequired
+}
 
 export default ProcessSteps;

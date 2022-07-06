@@ -8,12 +8,11 @@ export const Wrapper = styled('div')`
     margin-bottom: 30px;
 
     .unit-img {
-      display: none;
 
-      ${props => props.theme.breakpoints.up('sm')} {
+      ${props => props.theme.breakpoints.up('xs')} {
         display: block;
-        width: 130px;
-        height: auto;
+        width: 140px;
+        height: 140px;
       }
 
       ${props => props.theme.breakpoints.up('md')} {
@@ -24,6 +23,16 @@ export const Wrapper = styled('div')`
         width: 250px;
       }
     }
+    
+    .castel-img {
+      display: none;
+      
+      ${props => props.theme.breakpoints.up('xs')} {
+        display: block;
+        width: 94px;
+        height: 94px;
+      }
+    }
 
     .title {
       font-size: 42px;
@@ -31,6 +40,11 @@ export const Wrapper = styled('div')`
       text-align: center;
       line-height: 1.125;
       text-shadow: 0 0 30px #7452ad;
+
+      ${props => props.theme.breakpoints.up('xs')} {
+        font-size: 24px;
+        text-align: left;
+      }
 
       ${props => props.theme.breakpoints.up('md')} {
         font-size: 54px;
@@ -40,6 +54,10 @@ export const Wrapper = styled('div')`
         font-size: 64px;
       }
     }
+  }
+  
+  .title-container.title-container-mobile {
+    display: block;
   }
 
   .download-section {

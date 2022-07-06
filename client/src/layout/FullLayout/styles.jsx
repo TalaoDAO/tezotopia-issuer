@@ -2,7 +2,17 @@ import { styled } from '@mui/material';
 
 export const Wrapper = styled('div')`
   padding: 30px 0;
-
+      
+  &&.mobile-container {
+        ${props => props.theme.breakpoints.up('xs')} {
+              display: block;
+        }
+      
+        ${props => props.theme.breakpoints.up('sm')} {
+              display: none;
+        }
+  }   
+      
   .logo-wrapper {
     display: flex;
     align-items: center;
