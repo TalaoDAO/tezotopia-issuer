@@ -95,7 +95,7 @@ exports.getSignedVoucher = async (req, res) => {
 
     const expired = await checkExpiration(user);
     if (expired) {
-      return res.status(400).json({ message: 'Session expired!', success: false });
+      return res.status(408).json({ message: 'Session expired!', success: false });
     }
 
     const vp = JSON.parse(presentation);
