@@ -117,7 +117,9 @@ exports.getSignedVoucher = async (req, res) => {
     const verificationMethod = await didkit.getVerificationMethod(config.get('DEFAULT_JWK'));
     // const verificationMethod = 'did:tz:tz2X3K4x7346aUkER2NXSyYowG23ZRbueyse#blockchainAccountId';
     const signedVoucher = await didkit.sign(config.get('DEFAULT_JWK'), verificationMethod, voucher);
-    await storeSignedVoucher(signedVoucher);
+    if (voucherId !== "agora_pass") {
+      await storeSignedVoucher(signedVoucher);
+    }
 
     user.logged_in = true;
     await client.lSet(config.get('REDIS_KEY'), userIndex, JSON.stringify(user))

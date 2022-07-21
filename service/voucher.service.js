@@ -6,9 +6,11 @@ const config = require("config");
 const updateCredential = async (id, voucher, subjectId, correlation) => {
   const now = moment();
 
+  const duration = voucher.credentialSubject.offers ? voucher.credentialSubject.offers[0].duration : voucher.credentialSubject.duration
+
   const data = {
     blockchainTezos: correlation,
-    expirationDate: now.add(voucher.credentialSubject.offers[0].duration, 'days').toDate(),
+    expirationDate: now.add(duration, 'days').toDate(),
     issuanceDate: moment().toDate(),
     voucherId: `urn:uuid:${uuid.v4()}`,
     subjectId: subjectId,
