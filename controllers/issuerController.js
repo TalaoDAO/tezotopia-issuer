@@ -4,7 +4,7 @@ const moment = require('moment');
 const Voucher = require('../models/voucher');
 const client = require('../helpers/redis-client');
 const { findUser, checkExpiration, storeSession } = require('../service/auth.service');
-const { updateCredential, storeSignedVoucher, getVoucherById } = require('../service/voucher.service');
+const { updateCredential, storeSignedVoucher, getVoucherById, sendAnalytics } = require('../service/voucher.service');
 const didkit = require("../helpers/didkit-handler");
 const config = require("config");
 const { CREDENTIAL_MANIFEST } = require("../utils");
@@ -120,8 +120,9 @@ exports.getSignedVoucher = async (req, res) => {
     // const verificationMethod = 'did:tz:tz2X3K4x7346aUkER2NXSyYowG23ZRbueyse#blockchainAccountId';
     const signedVoucher = await didkit.sign(config.get('DEFAULT_JWK'), verificationMethod, voucher);
     if (voucherId !== "agora_pass") {
-      await storeSignedVoucher(signedVoucher);
+      await sendAnalytics(signedVoucher);
     }
+    await storeSignedVoucher(signedVoucher)
 
     user.logged_in = true;
     await client.lSet(config.get('REDIS_KEY'), userIndex, JSON.stringify(user))

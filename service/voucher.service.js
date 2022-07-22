@@ -35,6 +35,23 @@ const updateCredential = async (id, voucher, subjectId, correlation) => {
 };
 
 const storeSignedVoucher = async (voucher) => {
+  await saveSignedVoucher(voucher);
+}
+
+const saveSignedVoucher = async (signed_voucher) => {
+  return axios.post(
+    `${config.get('VOUCHER_API_URL')}/api/vouchers/credentials`,
+    { signed_voucher },
+    {
+      headers: {
+        'accept': 'application/json',
+        'key': 'SECRET_KEY'
+      }
+    }
+  );
+}
+
+const sendAnalytics = async (voucher) => {
   await sendToAnalytics(voucher);
 }
 
@@ -74,5 +91,6 @@ const getVoucherById = async (id) => {
 module.exports = {
   updateCredential,
   storeSignedVoucher,
-  getVoucherById
+  getVoucherById,
+  sendAnalytics
 }
