@@ -25,7 +25,8 @@ exports.generateQRCode = async (req, res) => {
     res.status(200).json({
       message: "QR Code URL", success: true, data: {
         url,
-        user
+        user,
+        voucher
       }
     });
   } catch (err) {
@@ -66,7 +67,8 @@ exports.getChallenge = async (req, res) => {
       "credentialPreview": voucher,      "expires": now.add(5, 'minutes').toDate(),
       "challenge": challenge,
       "domain": "tezotopia.talao.co",
-      "credential_manifest": CREDENTIAL_MANIFEST
+      "credential_manifest": CREDENTIAL_MANIFEST,
+      issuanceDate: moment().toDate(),
     };
 
     res.status(200).json(data);

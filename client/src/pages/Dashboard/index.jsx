@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isMembership, setIsMembership] = useState(false);
   const [isVoucherMobile, setIsVoucherMobile] = useState(false);
+  const [voucher, setVoucher] = useState(null)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,6 +43,9 @@ const Dashboard = () => {
           const { data = {} } = res;
           if (data.success) {
             setQRUrl(data.data.url);
+            setVoucher(data.data.voucher)
+
+            console.log('rabbi', data.data.voucher);
             setInterval(function () {
               socket.emit('check-status', data.data.user.session_id)
             }, 2000);
@@ -70,7 +74,7 @@ const Dashboard = () => {
                 sx={{ color: '#fbd400' }}
 
               >
-                15% discount
+                {voucher && voucher.credentialSubject.offers[0].benefit.discount} discount
               </Typography>
 
               <Typography
